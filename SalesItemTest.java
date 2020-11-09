@@ -40,6 +40,18 @@ public class SalesItemTest
     }
 
     /**
+     * Test that a sales item is correctly initialised (name and price).
+     */
+    @Test
+    public void testInit()
+    {
+        SalesItem salesIte1 = new SalesItem("test item", 200);
+        assertEquals("test item", salesIte1.getName());
+        assertEquals(200, salesIte1.getPrice());
+        assertEquals(0, salesIte1.getNumberOfComments());
+    }
+
+    /**
      * Test that get number of comments returns the correct number of comments attached to a sale item.
      */
     @Test
@@ -81,6 +93,46 @@ public class SalesItemTest
         //test invalid comment (dup[licate author)
         assertEquals(false, salesIte1.addComment("Adam Lichter", "great", 4));
         assertEquals(1, salesIte1.getNumberOfComments());
+    }
+
+    /**
+     * Test remove comment.
+     */
+    @Test
+    public void testRemoveComment()
+    {
+        SalesItem salesIte1 = new SalesItem("TestBook, 2nd ed", 20);
+
+        //test remove comment
+        salesIte1.addComment("Adam Lichter", "great", 4);
+        salesIte1.removeComment(0);
+        assertEquals(0, salesIte1.getNumberOfComments());
+
+        //test invalid remove comment (index out of range)
+        salesIte1.addComment("Adam Lichter", "great", 4);
+        salesIte1.removeComment(1);
+        assertEquals(1, salesIte1.getNumberOfComments());
+
+        //test invalid remove comment (index out of range)
+        salesIte1.removeComment(-1);
+        assertEquals(1, salesIte1.getNumberOfComments());
+
+        //test invalid remove comment (index out of range)
+        // reset to zero comments
+        salesIte1.removeComment(0);
+        // try removing comment that doesn't exist
+        salesIte1.removeComment(0);
+        assertEquals(0, salesIte1.getNumberOfComments());
+
+        // test two comment removing
+        salesIte1.addComment("Adam Lichter", "great", 4);
+        salesIte1.addComment("Adam Lichter2", "great", 5);
+        assertEquals(2, salesIte1.getNumberOfComments());
+        // remove at 0th index
+        salesIte1.removeComment(0);
+        //check that there is one comment
+        assertEquals(1, salesIte1.getNumberOfComments());
+        
     }
 
 }
