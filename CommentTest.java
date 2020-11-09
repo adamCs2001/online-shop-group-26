@@ -13,6 +13,11 @@ import org.junit.Test;
  */
 public class CommentTest
 {
+<<<<<<< Updated upstream
+=======
+    private Comment comment1;
+
+>>>>>>> Stashed changes
     /**
      * Default constructor for test class CommentTest
      */
@@ -28,6 +33,12 @@ public class CommentTest
     @Before
     public void setUp()
     {
+<<<<<<< Updated upstream
+=======
+        
+        comment1 = new Comment("Tester", "Test comment", 4);
+        
+>>>>>>> Stashed changes
     }
 
     /**
@@ -39,4 +50,30 @@ public class CommentTest
     public void tearDown()
     {
     }
+<<<<<<< Updated upstream
 }
+=======
+
+    @Test
+    public void testDownvote()
+    {
+        comment1.downvote();
+        assertEquals(-1, comment1.getVoteCount());
+        comment1.downvote();
+        comment1.upvote();
+        comment1.upvote();
+        comment1.upvote();
+        comment1.upvote();
+        comment1.downvote();
+        assertEquals(1, comment1.getVoteCount());
+    }
+
+    @Test
+    public void testGetRating()
+    {
+        assertEquals(4, comment1.getRating());
+    }
+}
+
+
+>>>>>>> Stashed changes
