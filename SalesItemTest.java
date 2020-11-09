@@ -135,4 +135,101 @@ public class SalesItemTest
         
     }
 
+    
+
+    @Test
+    public void testUpvoteComment()
+    {
+        //add item, add comment on item
+        SalesItem salesIte1 = new SalesItem("test item", 123);
+        assertEquals(true, salesIte1.addComment("A", "comment A", 0));
+        //upvote comment once
+        salesIte1.upvoteComment(0);
+        //
+        Comment comment1 = salesIte1.findMostHelpfulComment();
+        //confirm vote count is 1
+        assertEquals(1, comment1.getVoteCount());
+        //add second comment
+        assertEquals(true, salesIte1.addComment("B", "comment B", 0));
+        //upvote second comment 4 times
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        //second comment is now most helpful
+        Comment comment2 = salesIte1.findMostHelpfulComment();
+        //confirm vote count is 4
+        assertEquals(4, comment2.getVoteCount());
+    }
+
+
+
+    @Test
+    public void testFindMostHelpfulComment()
+    {
+        //add 2 comments
+        SalesItem salesIte1 = new SalesItem("test item", 1234);
+        assertEquals(true, salesIte1.addComment("A", "comment A", 0));
+        assertEquals(true, salesIte1.addComment("B", "comment B", 0));
+        
+        //upvote first comment once
+        salesIte1.upvoteComment(0);
+        
+        //comment1 = most helpful comment
+        Comment comment1 = salesIte1.findMostHelpfulComment();
+        
+        //confirm that comment1 is the one it should be
+        assertEquals("A", comment1.getAuthor());
+        assertEquals(1, comment1.getVoteCount());
+        
+        //upvote second comment 3 times
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        
+        //comment2 = most helpful comment
+        Comment comment2 = salesIte1.findMostHelpfulComment();
+        
+        //confirm that comment2 is the correct one
+        assertEquals("B", comment2.getAuthor());
+        assertEquals(3, comment2.getVoteCount());
+        
+        //test when one comment has negative votes
+        
+        //downvote second comment 4 times (now rating should = -1)
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        
+        //upvote first comment three times, downvote twice (net +1, now rating should = 2)
+        salesIte1.downvoteComment(0);
+        salesIte1.upvoteComment(0);
+        salesIte1.downvoteComment(0);
+        salesIte1.upvoteComment(0);
+        salesIte1.upvoteComment(0);
+        
+        //confirm that comment1 is now most helpful again and has correct number of votes
+        assertEquals(comment1, salesIte1.findMostHelpfulComment());
+        assertEquals("A", comment1.getAuthor());
+        assertEquals(2, comment1.getVoteCount());
+        
+        //test when both comments have negative votes
+        
+        //downvote comment1 three times, rating should now be -2
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        
+        //most helpful comment should now be comment2 with -1 rating
+        assertEquals(comment2, salesIte1.findMostHelpfulComment());
+        assertEquals(-1, comment2.getVoteCount());
+    }
 }
+
+
+
+
+
+
