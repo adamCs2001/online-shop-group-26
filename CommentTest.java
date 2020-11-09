@@ -13,17 +13,14 @@ import org.junit.Test;
  */
 public class CommentTest
 {
-<<<<<<< Updated upstream
-=======
     private Comment comment1;
 
->>>>>>> Stashed changes
     /**
      * Default constructor for test class CommentTest
      */
     public CommentTest()
     {
-    }
+     }
 
     /**
      * Sets up the test fixture.
@@ -33,13 +30,10 @@ public class CommentTest
     @Before
     public void setUp()
     {
-<<<<<<< Updated upstream
-=======
         
         comment1 = new Comment("Tester", "Test comment", 4);
-        
->>>>>>> Stashed changes
-    }
+
+     }
 
     /**
      * Tears down the test fixture.
@@ -50,9 +44,6 @@ public class CommentTest
     public void tearDown()
     {
     }
-<<<<<<< Updated upstream
-}
-=======
 
     @Test
     public void testDownvote()
@@ -76,4 +67,3 @@ public class CommentTest
 }
 
 
->>>>>>> Stashed changes
