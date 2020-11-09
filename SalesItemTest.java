@@ -82,16 +82,19 @@ public class SalesItemTest
         assertEquals(true, salesIte1.addComment("Adam Lichter", "great", 4));
         assertEquals(1, salesIte1.getNumberOfComments());
 
-        //test invalid comment (rating out of range)
-        assertEquals(false, salesIte1.addComment("Adam Lichter 2", "great", 400));
-        assertEquals(1, salesIte1.getNumberOfComments());
-
-        //test invalid comment (rating out of range)
-        assertEquals(false, salesIte1.addComment("Adam Lichter 3", "great", -400));
-        assertEquals(1, salesIte1.getNumberOfComments());
-
-        //test invalid comment (dup[licate author)
+        //test invalid comment (duplicate author)
         assertEquals(false, salesIte1.addComment("Adam Lichter", "great", 4));
+        assertEquals(1, salesIte1.getNumberOfComments());
+
+        // reset comments to 0
+        salesIte1.removeComment(0);
+
+        //test invalid comment (rating out of range)
+        assertEquals(false, salesIte1.addComment("Adam Lichter", "great", 0));
+        assertEquals(1, salesIte1.getNumberOfComments());
+
+        //test invalid comment (rating out of range)
+        assertEquals(false, salesIte1.addComment("Adam Lichter 2", "great", 6));
         assertEquals(1, salesIte1.getNumberOfComments());
     }
 
@@ -132,10 +135,9 @@ public class SalesItemTest
         salesIte1.removeComment(0);
         //check that there is one comment
         assertEquals(1, salesIte1.getNumberOfComments());
-        
+
     }
 
-    
 
     @Test
     public void testUpvoteComment()
@@ -163,7 +165,6 @@ public class SalesItemTest
     }
 
 
-
     @Test
     public void testFindMostHelpfulComment()
     {
@@ -171,65 +172,62 @@ public class SalesItemTest
         SalesItem salesIte1 = new SalesItem("test item", 1234);
         assertEquals(true, salesIte1.addComment("A", "comment A", 0));
         assertEquals(true, salesIte1.addComment("B", "comment B", 0));
-        
+
         //upvote first comment once
         salesIte1.upvoteComment(0);
-        
+
         //comment1 = most helpful comment
         Comment comment1 = salesIte1.findMostHelpfulComment();
-        
+
         //confirm that comment1 is the one it should be
         assertEquals("A", comment1.getAuthor());
         assertEquals(1, comment1.getVoteCount());
-        
+
         //upvote second comment 3 times
         salesIte1.upvoteComment(1);
         salesIte1.upvoteComment(1);
         salesIte1.upvoteComment(1);
-        
+
         //comment2 = most helpful comment
         Comment comment2 = salesIte1.findMostHelpfulComment();
-        
+
         //confirm that comment2 is the correct one
         assertEquals("B", comment2.getAuthor());
         assertEquals(3, comment2.getVoteCount());
-        
+
         //test when one comment has negative votes
-        
+
         //downvote second comment 4 times (now rating should = -1)
         salesIte1.downvoteComment(1);
         salesIte1.downvoteComment(1);
         salesIte1.downvoteComment(1);
         salesIte1.downvoteComment(1);
-        
+
         //upvote first comment three times, downvote twice (net +1, now rating should = 2)
         salesIte1.downvoteComment(0);
         salesIte1.upvoteComment(0);
         salesIte1.downvoteComment(0);
         salesIte1.upvoteComment(0);
         salesIte1.upvoteComment(0);
-        
+
         //confirm that comment1 is now most helpful again and has correct number of votes
         assertEquals(comment1, salesIte1.findMostHelpfulComment());
         assertEquals("A", comment1.getAuthor());
         assertEquals(2, comment1.getVoteCount());
-        
+
         //test when both comments have negative votes
-        
+
         //downvote comment1 three times, rating should now be -2
         salesIte1.downvoteComment(0);
         salesIte1.downvoteComment(0);
         salesIte1.downvoteComment(0);
         salesIte1.downvoteComment(0);
-        
+
         //most helpful comment should now be comment2 with -1 rating
         assertEquals(comment2, salesIte1.findMostHelpfulComment());
         assertEquals(-1, comment2.getVoteCount());
     }
 }
-
-
-
 
 
 
