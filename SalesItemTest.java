@@ -147,7 +147,8 @@ public class SalesItemTest
         assertEquals(true, salesIte1.addComment("A", "comment A", 0));
         //upvote comment once
         salesIte1.upvoteComment(0);
-        //
+        //there is only one comment so it is the most helpful
+        //create object comment1 so votecount can be checked
         Comment comment1 = salesIte1.findMostHelpfulComment();
         //confirm vote count is 1
         assertEquals(1, comment1.getVoteCount());
@@ -164,14 +165,49 @@ public class SalesItemTest
         assertEquals(4, comment2.getVoteCount());
     }
 
-
+    @Test
+    public void testDownvoteComment()
+    {
+        //add item, comment on item
+        SalesItem salesIte1 = new SalesItem("test item", 123);
+        assertEquals(true, salesIte1.addComment("A", "Comment A", 1));
+        //downvote comment once
+        salesIte1.downvoteComment(0);
+        //there is only one comment so it is the most helpful
+        //create object comment1 so votecount can be checked
+        Comment comment1 = salesIte1.findMostHelpfulComment();
+        //check if vote count is correct (-1)
+        assertEquals(-1, comment1.getVoteCount());
+        //downvote 4 times
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        salesIte1.downvoteComment(0);
+        //check if vote count is correct (-5)
+        assertEquals(-5, comment1.getVoteCount());
+        //add second comment
+        assertEquals(true, salesIte1.addComment("B", "comment B", 1));
+        Comment comment2 = salesIte1.findMostHelpfulComment();
+        //downvote comment B twice, upvote three times, downvote twice again
+        //total vote count should be -3
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        salesIte1.upvoteComment(1);
+        salesIte1.upvoteComment(1);
+        salesIte1.downvoteComment(1);
+        salesIte1.downvoteComment(1);
+        //check if vote total is correct (-3)
+        assertEquals(-3, comment2.getVoteCount());
+    }
+    
     @Test
     public void testFindMostHelpfulComment()
     {
         //add 2 comments
         SalesItem salesIte1 = new SalesItem("test item", 1234);
-        assertEquals(true, salesIte1.addComment("A", "comment A", 0));
-        assertEquals(true, salesIte1.addComment("B", "comment B", 0));
+        assertEquals(true, salesIte1.addComment("A", "comment A", 1));
+        assertEquals(true, salesIte1.addComment("B", "comment B", 1));
 
         //upvote first comment once
         salesIte1.upvoteComment(0);
@@ -227,7 +263,27 @@ public class SalesItemTest
         assertEquals(comment2, salesIte1.findMostHelpfulComment());
         assertEquals(-1, comment2.getVoteCount());
     }
+
+    @Test
+    public void testRatingInvalid()
+    {
+        SalesItem salesIte1 = new SalesItem("test item", 1234);
+        //add a comment with rating 3
+        //should return true because rating is between 1 and 5
+        assertEquals(true, salesIte1.addComment("A", "valid comment", 3));
+        //add a comment with rating -3
+        //should return false because rating is < 1 
+        assertEquals(false, salesIte1.addComment("B", "invalid comment", -3));
+        //add a comment with rating 8
+        //should return false because rating is > 5
+        assertEquals(false, salesIte1.addComment("C", "invalid comment", 8));
+        //add a comment with rating 0
+        //should return false becacuse rating is < 1
+        assertEquals(false, salesIte1.addComment("D", "invalid comment", 0));
+    }
 }
+
+
 
 
 
